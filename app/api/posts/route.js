@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/libs/database";
 import Post from "@/models/Post";
+export const dynamic = "force-dynamic";
 
 export async function POST(request) {
   try {
@@ -26,6 +27,7 @@ export async function GET(request) {
     await connectDB();
     const posts = await Post.find()
       .populate("userId", "username image")
+      .populate("likes", "username")
       .sort({ createdAt: -1 });
     return NextResponse.json({ posts }, { status: 200 });
   } catch (e) {
